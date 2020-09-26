@@ -4,7 +4,7 @@
 ## Employee Directory
 
 ## Live URL
-https://serene-tundra-94628.herokuapp.com/
+https://employee-directory-jeff.herokuapp.com/
 
 ## Description
 To  create a employee directory with React. This assignment will require you to break up your application's UI into components, manage component state, and respond to user events.
