@@ -9,7 +9,8 @@ class EmployeeTable extends React.Component {
       data: [],
       filteredData: [],
       lastSorted: "",
-      sortOrder: 0 // 0 means hasn't been sorted, 1 means ascending, -1 means descending
+      //0 means default order, no sort
+      sortOrder: 0 
     };
     
     componentDidMount() {
@@ -19,7 +20,7 @@ class EmployeeTable extends React.Component {
     loadEmployees = async () => {
       try {
         let query = `https://randomuser.me/api/?results=50&nat=AU&inc=gender,name,location,email,phone,picture,birthday`; // request 100 people
-        // console.log("loadEmployees calling ", query);
+        // console.log(query);
         const employees = await axios.get(query);
         // console.log(employees);
         this.setState({ data: employees.data.results, filteredData: employees.data.results });
@@ -31,24 +32,21 @@ class EmployeeTable extends React.Component {
     }
 
     handleClickEvent = (event) => {
-      // First, figure out what was sorted last
-      // If the item that was sorted last is sorted again, reverse the order
-      // If the item that was sorted last is different, sort in ascending order
-
-      let sortOrder = 1; // Default to ascending order unless this was sorted before, in which case reverse it
+// default order is ascending
+      let sortOrder = 1; 
       let lastSorted = '';
       switch(event.target.id) {
         case("sortName"):
         case("sortNameButton"): {
           if(this.state.lastSorted === 'sortName') {
-            // reverse the order
+            // reverse order in alphabet
             sortOrder = this.state.sortOrder * -1;
           }
 
           this.state.filteredData.sort( (a, b) => {
+            // method to compare names by alphabet
             const aName = a.name.last + ", " + a.name.first;
             const bName = b.name.last + ", " + b.name.first;
-            // console.log("sorting " + aName + " vs " + bName + " and aName - bName = " + (aName.localeCompare(bName)));
             if(sortOrder === 1) {
               return aName.localeCompare(bName);
             } else {
@@ -63,7 +61,7 @@ class EmployeeTable extends React.Component {
         case("sortCity"):
         case("sortCityButton"): {
           if(this.state.lastSorted === 'sortCity') {
-            // reverse the order
+            // reverse
             sortOrder = this.state.sortOrder * -1;
           }
 
@@ -78,27 +76,6 @@ class EmployeeTable extends React.Component {
           });
 
           lastSorted = 'sortCity';
-          break;
-        }
-
-        case("sortProvince"):
-        case("sortProvinceButton"): {
-          if(this.state.lastSorted === 'sortProvince') {
-            // reverse the order
-            sortOrder = this.state.sortOrder * -1;
-          }
-
-          this.state.filteredData.sort( (a, b) => {
-            const aProvince = a.location.state;
-            const bProvince = b.location.state;
-            if(sortOrder === 1) {
-              return aProvince.localeCompare(bProvince);
-            } else {
-              return bProvince.localeCompare(aProvince);
-            }
-          });    
-          
-          lastSorted = 'sortProvince';
           break;
         }
 
